@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Политика конфиденциальности - Тест НОК-600</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header>
+        <div id="header-controls" style="justify-content: center;">
+            <h1 style="text-align: center; margin: 0; flex-grow: 0;">Конфиденциальность</h1>
+        </div>
+    </header>
+    
+    <div class="container">
+        <main style="padding: 2rem;">
+            <h2>Политика конфиденциальности</h2>
+            
+            <div class="setting-group">
+                <h3>1. Какие данные мы собираем</h3>
+                <p>Приложение <strong>НЕ собирает</strong> персональные данные пользователей. Все данные хранятся локально на вашем устройстве:</p>
+                <div class="setting-item">
+                    <span class="setting-label">📊 Прогресс обучения</span>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">❌ Совершенные ошибки</span>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">⚙️ Настройки приложения</span>
+                </div>
+            </div>
+            
+            <div class="setting-group">
+                <h3>2. Локальное хранение данных</h3>
+                <p>Мы используем <strong>localStorage</strong> вашего браузера для сохранения:</p>
+                <div class="setting-item">
+                    <span class="setting-label">Результатов тестирования</span>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">Настроек отображения</span>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">Истории ошибок для повторения</span>
+                </div>
+                <p>Эти данные <strong>не передаются</strong> на сервер и доступны только вам.</p>
+            </div>
+            
+            <div class="setting-group">
+                <h3>3. Файлы cookie</h3>
+                <p>Приложение не использует файлы cookie для отслеживания пользователей.</p>
+            </div>
+            
+            <div class="setting-group">
+                <h3>4. Сторонние сервисы</h3>
+                <p>Мы не используем аналитику и не передаем данные третьим лицам.</p>
+            </div>
+            
+            <div class="setting-group">
+                <h3>5. Удаление данных</h3>
+                <p>Для полного удаления всех данных:</p>
+                <div class="setting-item">
+                    <span class="setting-label">Используйте функцию "Сбросить прогресс" в приложении</span>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">Или очистите данные сайта в настройках браузера</span>
+                </div>
+            </div>
+            
+            <p><em>Обновлено: 2025</em></p>
+        </main>
+    </div>
+
+    <!-- ФУТЕР С КНОПКОЙ "В МЕНЮ" -->
+    <div class="fixed-footer">
+        <div class="fixed-button-group">
+            <a href="../index.html" class="button submit-button" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                В меню
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Загружаем тему
+            const savedState = localStorage.getItem('quizState');
+            if (savedState) {
+                const state = JSON.parse(savedState);
+                if (state.settings && state.settings.theme === 'dark') {
+                    document.body.classList.add('dark-theme');
+                }
+            }
+
+            // Обновляем отступы
+            function updatePadding() {
+                const root = document.documentElement;
+                const header = document.querySelector('header');
+                const footer = document.querySelector('.fixed-footer');
+                
+                if (header) {
+                    root.style.setProperty('--dynamic-header-height', header.offsetHeight + 'px');
+                }
+                if (footer) {
+                    root.style.setProperty('--dynamic-footer-height-actual', footer.offsetHeight + 'px');
+                }
+            }
+
+            updatePadding();
+            window.addEventListener('resize', updatePadding);
+        });
+    </script>
+</body>
+</html>

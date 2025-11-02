@@ -1,0 +1,627 @@
+        :root {
+            --primary-bg: #f5f7fa;
+            --secondary-bg: #c3cfe2;
+            --container-bg: #ffffff;
+            --header-start: #2c3e50;
+            --header-end: #34495e;
+            --text-color: #333;
+            --button-submit-bg: #3498db;
+            --button-next-bg: #2ecc71;
+            --button-danger-bg: #e74c3c;
+            --option-bg: #f9fafb;
+            --option-border: #e5e7eb;
+            --option-hover-bg: #f3f4f6;
+            --option-selected-bg: #a0c4ff;
+            --option-selected-border: #4a72d1;
+            --option-correct-bg: #d1fae5;
+            --option-correct-border: #059669;
+            --option-correct-text: #065f46;
+            --option-incorrect-bg: #fee2e2;
+            --option-incorrect-border: #dc2626;
+            --option-incorrect-text: #991b1b;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --setting-border: #e0e0e0;
+
+            /* Дефолтные значения переменных, которые задаст JS */
+            --dynamic-header-height: 65px; 
+            --dynamic-footer-height-actual: 90px;
+            --scroll-buffer-height: 80px; 
+        }
+
+        .dark-theme {
+            --primary-bg: #2c3e50;
+            --secondary-bg: #1a2833;
+            --container-bg: #34495e;
+            --text-color: #ecf0f1;
+            --option-bg: #2c3e50;
+            --option-border: #46627f;
+            --option-hover-bg: #4a6582;
+            --question-text-color: #ecf0f1;
+            --option-text-color: #ecf0f1;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --setting-border: #4a6582;
+            /* Обновляем цвета для фиксированного хедера в темной теме */
+            --header-fixed-text-color: #ecf0f1;
+            --header-fixed-border-color: #46627f;
+        }
+        
+        :not(.dark-theme) {
+            --header-fixed-text-color: white;
+            --header-fixed-border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        /* 1. Управление прокруткой страницы */
+        body {
+            background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
+            min-height: 100vh;
+            height: 100vh; 
+            overflow: hidden; 
+            color: var(--text-color);
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 0; 
+        }
+        
+        /* 2. Контейнер контента с прокруткой */
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            background-color: var(--container-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            
+            flex-grow: 1; 
+            min-height: 0; 
+            
+            overflow-y: auto; 
+            
+            margin-top: var(--dynamic-header-height); 
+            margin-bottom: var(--dynamic-footer-height-actual); 
+            
+            padding-bottom: calc(1rem + var(--scroll-buffer-height)); 
+        }
+
+        /* 3. Фиксированный хедер (поверх всего) */
+        header {
+            background: var(--header-end); 
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            border-radius: 0;
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(800px, 100%);
+            max-width: 800px;
+            z-index: 100;
+            box-shadow: 0 2px 5px var(--header-end);
+            
+            display: flex;
+            flex-direction: column; 
+            align-items: stretch;
+            gap: 5px; 
+        }
+        
+        header #header-controls {
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            position: relative; 
+            width: 100%;
+            min-height: 40px;
+        }
+        
+        header h1 {
+            text-align: center;
+            margin: 0; 
+            flex-grow: 1; 
+            position: static;
+            left: auto;
+            transform: none;
+            width: auto;
+            flex-shrink: 0; 
+        }
+
+        #start-screen, #settings-screen {
+            text-align: center; 
+            padding-bottom: 0.5rem; 
+        }
+        
+        
+        /* Стили для фиксированной области викторины (статус + вопрос) */
+        #fixed-quiz-info {
+            text-align: left;
+            padding-top: 5px;
+            border-top: 1px solid var(--header-fixed-border-color);
+            position: relative; 
+        }
+        
+        .tts-mode-button {
+            background: none;
+            border: none;
+            color: var(--header-fixed-text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0; 
+            flex-shrink: 0; 
+            transition: color 0.2s, opacity 0.2s;
+            position: relative; 
+            z-index: 101; 
+        }
+
+        .tts-mode-button.tts-off {
+             opacity: 0.5; 
+             color: #ecf0f1;
+        }
+        .tts-mode-button.tts-on {
+             opacity: 1;
+             color: var(--button-next-bg); 
+        }
+        
+        .question-text-fixed {
+            color: var(--header-fixed-text-color);
+            font-size: 1rem; 
+            font-weight: 500; 
+            margin-top: 0; 
+            position: relative; 
+        }
+        
+        /* NEW: Кнопка повтора озвучивания (В ФУТЕРЕ) - СТИЛИ ДЛЯ КРУГЛОЙ КНОПКИ */
+        #tts-replay-button {
+            background-color: var(--button-submit-bg); 
+            color: white;
+            border: none;
+            /* Изначальные размеры, когда кнопка скрыта */
+            width: 0;
+            height: 55px; 
+            min-width: 0;
+            padding: 0; /* Убираем внутренние отступы в скрытом состоянии */
+            border-radius: 50%;
+            font-size: 1.5rem; 
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            /* Плавный переход для всех свойств */
+            transition: background-color 0.2s, opacity 0.3s, transform 0.2s, width 0.3s ease-in-out, min-width 0.3s ease-in-out, padding 0.3s ease-in-out;
+            
+            opacity: 0; /* Изначально скрыта */
+            pointer-events: none;
+            
+            flex-grow: 0;
+            flex-shrink: 0; 
+            flex-basis: auto; 
+            
+            position: relative;
+            z-index: 10;
+            overflow: hidden; /* Скрываем содержимое при схлопывании */
+        }
+
+        #tts-replay-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Класс, который делает кнопку видимой */
+        #tts-replay-button.visible {
+            opacity: 1;
+            pointer-events: auto; 
+            /* Возвращаем исходные размеры */
+            width: 55px;
+            min-width: 55px;
+        }
+        
+        /* Общий стиль для всех фиксированных футеров */
+        .fixed-footer {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(800px, 100%);
+            max-width: 800px;
+            background-color: var(--container-bg);
+            padding: 1rem;
+            box-shadow: 0 -2px 5px var(--shadow-color);
+            z-index: 100;
+            border-radius: 0;
+        }
+        
+        /* ДОБАВЛЕНО/ИЗМЕНЕНО: Ширина кнопок модального окна изменена на 40% */
+        #modal-buttons button {
+            width: 40%; 
+            max-width: 40%;
+            min-height: 55px;
+            height: 100%; 
+            flex-grow: 1; 
+            flex-shrink: 1;
+            flex-basis: auto;
+        }
+
+        #quiz-footer-fixed #button-container,
+        #start-footer-fixed .fixed-button-group,
+        #results-footer-fixed .fixed-button-group {
+            display: flex;
+            justify-content: space-evenly;
+            gap: 10px;
+            margin: 0; 
+            align-items: center; /* Центрируем элементы по вертикали */
+        }
+        
+        /* FIX: Устанавливаем всем основным кнопкам равный вес */
+        #quiz-footer-fixed #button-container #action-button, 
+        #quiz-footer-fixed #button-container #back-to-menu-btn,
+        #quiz-footer-fixed #button-container #review-in-quiz-btn {
+            flex-grow: 1; 
+            flex-shrink: 1; 
+            flex-basis: 0;  
+            position: relative; 
+            min-height: 55px; 
+            height: 100%;
+        }
+
+        #start-footer-fixed .fixed-button-group button,
+        #results-footer-fixed .fixed-button-group button {
+            flex-grow: 1;
+            flex-shrink: 1;
+            flex-basis: 0;
+            min-height: 55px; 
+            height: 100%; 
+        }
+        
+        .block-button, .control-button {
+            background: var(--button-submit-bg);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        
+        .control-button.danger {
+            background-color: var(--button-danger-bg);
+        }
+        
+        #my-mistakes-btn {
+            background-color: var(--button-next-bg); 
+        }
+
+        .block-button:hover, .control-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+        
+        #blocks-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .option {
+            background-color: var(--option-bg);
+            border: 1px solid var(--option-border);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 0.4rem; 
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            user-select: none;
+            text-align: left;
+            color: var(--text-color); 
+        }
+        .option:hover {
+            background-color: var(--option-hover-bg);
+        }
+        .option.selected {
+            background-color: var(--option-selected-bg);
+            border-color: var(--option-selected-border);
+        }
+        .option.correct {
+            background-color: var(--option-correct-bg);
+            border-color: var(--option-correct-border);
+            color: var(--option-correct-text);
+        }
+        .option.incorrect {
+            background-color: var(--option-incorrect-bg);
+            border-color: var(--option-incorrect-border);
+            color: var(--option-incorrect-text);
+        }
+        /* ИЗМЕНЕНО: Уменьшен вертикальный padding и добавлена min-height */
+        .button {
+            transition: background-color 0.2s;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            padding: 8px 30px; 
+            min-height: 55px;
+            border-radius: 50px;
+            font-size: 14px;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            text-align: center; 
+        }
+        .next-button {
+            background-color: var(--button-next-bg);
+            color: white;
+        }
+        .submit-button {
+            background-color: var(--button-submit-bg);
+            color: white;
+        }
+        .score-box {
+            padding-bottom: 0.5rem; 
+            text-align: center;
+        }
+        
+        .progress-bar {
+            background-color: #e5e7eb;
+            border-radius: 9999px;
+            height: 1rem;
+            overflow: hidden;
+            width: 80%;
+            margin: 1rem auto;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: var(--button-next-bg);
+            transition: width 0.3s ease-in-out;
+        }
+        
+        /* NEW: Стили для кнопки настроек */
+        #settings-toggle {
+            position: relative; 
+            background: none;
+            border: none; 
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 24px; /* Меньше, чем старая кнопка темы, но больше, чем tts */
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 101; 
+            margin-right: 0; 
+            transition: transform 0.3s ease;
+        }
+        
+        #settings-toggle:hover {
+            transform: rotate(45deg);
+        }
+        
+        header #tts-toggle-button {
+            order: 1; 
+            margin-left: 6px;
+        }
+        header #settings-toggle {
+            order: 3;
+            margin-right: 0px;
+        }
+        header h1 {
+            order: 2; 
+        }
+        
+        .modal {
+            display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
+            overflow: auto; background-color: rgba(0, 0, 0, 0.4); justify-content: center; align-items: center;
+        }
+        .modal-content {
+            background-color: var(--container-bg); padding: 2rem; border-radius: 1rem; width: 90%;
+            max-width: 500px; text-align: center; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .hidden { display: none; }
+        .flex { display: flex; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .items-center { align-items: center; }
+        .text-lg { font-size: 1.125rem; }
+        .font-medium { font-weight: 500; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mt-6 { margin-top: 1.5rem; }
+        .space-x-4 > * + * { margin-left: 1rem; }
+        
+        /* NEW: Стили для страницы настроек */
+        #settings-screen {
+            padding: 1rem 1rem 0;
+            text-align: left;
+        }
+
+        .setting-group {
+            border: 1px solid var(--setting-border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            background-color: var(--option-bg);
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--option-border);
+            color: var(--text-color);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-label {
+            font-weight: 500;
+            flex-grow: 1;
+        }
+
+        .setting-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 120px;
+            justify-content: flex-end;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 45px;
+            height: 25px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 25px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 17px;
+            width: 17px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--button-next-bg);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+        
+        #tts-voice-select {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid var(--option-border);
+            background-color: var(--container-bg);
+            color: var(--text-color);
+        }
+        
+        #theme-mode-btn {
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background-color 0.2s;
+            background-color: var(--button-submit-bg);
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+#rounds-buttons-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+#rounds-buttons-container .control-button {
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+        /* Стили для контейнера кругов ошибок */
+        .rounds-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 100%;
+        }
+
+        .rounds-container .control-button {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 1200px) {
+            
+            header, .fixed-footer { 
+                width: 100%; 
+                max-width: none; 
+                left: 0; 
+                transform: none; 
+                border-radius: 0;
+            }
+            
+            body { 
+                padding: 0; 
+            }
+            .container { 
+                border-radius: 0; 
+                margin: 0; 
+                max-width: none;
+                width: 100%;
+                
+                /* НОВЫЕ ДИНАМИЧЕСКИЕ ОТСТУПЫ */
+                margin-top: var(--dynamic-header-height, 60px); 
+                margin-bottom: var(--dynamic-footer-height-actual, 90px); 
+            }
+            
+            main { padding: 0.5rem; }
+            .option { padding: 0.8rem; }
+            .fixed-footer button {
+                padding: 10px 18px; 
+                font-size: 13px;
+            }
+            .question-text-fixed {
+                font-size: 1.1rem; 
+            }
+            
+            header #tts-toggle-button {
+                font-size: 20px;
+                margin-left: 6px;
+            }
+            #settings-toggle {
+                font-size: 20px;
+                margin-right: 0px;
+            }
+        }
+
+/* Базовые стили для опций - оставьте как есть */
+.option {
+    background-color: var(--option-bg);
+    border: 1px solid var(--option-border);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin-bottom: 0.4rem; 
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    user-select: none;
+    text-align: left;
+    color: var(--text-color); 
+}
